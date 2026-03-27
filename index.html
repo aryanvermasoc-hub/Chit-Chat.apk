@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chit-Chat | Premium Messaging & Games</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="apple-touch-icon" href="my-logo.png">
+  
+  <link rel="stylesheet" href="style.css?v=18">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <div class="ambient-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div id="authScreen" class="screen active">
+    <div class="auth-container">
+      <div class="glass-card auth-card">
+        <div class="auth-header">
+          <div class="logo-box"><i class="fa-regular fa-comments"></i></div>
+          <h2>Chit-Chat</h2>
+          <p>Connect securely, play instantly.</p>
+        </div>
+        <div class="auth-tabs">
+          <button id="tabLogin" class="active">Login</button>
+          <button id="tabSignup">Sign Up</button>
+        </div>
+        <form id="authForm" onsubmit="return false;">
+          <div class="input-group" id="nameGroup" style="display: none;"><i class="fa-regular fa-user"></i><input type="text" id="fullName" placeholder="Display Name"></div>
+          <div class="input-group"><i class="fa-solid fa-at"></i><input type="text" id="username" placeholder="Username"></div>
+          <div class="input-group"><i class="fa-solid fa-lock"></i><input type="password" id="password" placeholder="Password"></div>
+          <button id="authActionBtn" class="primary-btn glow-btn">Enter Chit-Chat</button>
+        </form>
+      </div>
+      <div class="auth-footer">
+        <span>Developed by <span class="developer-name">Aryan Verma</span></span>
+        <a href="https://aryanvermasoc-hub.github.io/My-Info-ARYAN-VERMA/" target="_blank" class="about-link">About <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div id="appScreen" class="screen app-layout" style="display: none;">
+    <aside class="sidebar" id="sidebar">
+      
+      <div class="sidebar-header">
+        <div class="current-user" title="View My Profile">
+          <img id="myAvatar" src="" alt="Me" class="avatar">
+          <div class="user-meta">
+            <span id="myName" class="name">Loading...</span>
+            <span id="myUsername" class="handle">@...</span>
+          </div>
+        </div> 
+        <button id="chatToggleBtn" class="primary-btn" style="padding: 6px 14px; font-size: 12px; width: auto; border-radius: 20px; box-shadow: 0 4px 10px rgba(139,92,246,0.3);">
+          <i class="fa-solid fa-message"></i> Chats
+        </button>
+      </div>
+
+      <div id="newsFeedContainer" class="users-list" style="display: none; flex-direction: column; gap: 15px; padding: 15px; overflow-y: auto;">
+      </div>
+
+      <div id="gamesNavContainer" class="users-list" style="display: flex; flex-direction: column; gap: 15px; padding: 15px; overflow-y: auto;">
+        <div class="games-header-banner">
+            <h3>Arcade Zone</h3>
+            <p>Play Solo or Challenge Friends!</p>
+        </div>
+        <div class="game-card" onclick="startSinglePlayer('tictactoe')">
+            <div class="game-icon"><i class="fa-solid fa-table-cells"></i></div>
+            <div class="game-info">
+                <h4>Tic Tac Toe</h4>
+                <span>Vs Computer</span>
+            </div>
+        </div>
+        <div class="game-card" onclick="startSinglePlayer('rps')">
+            <div class="game-icon"><i class="fa-solid fa-hand-scissors"></i></div>
+            <div class="game-info">
+                <h4>Rock Paper Scissors</h4>
+                <span>Vs Computer</span>
+            </div>
+        </div>
+        <div class="game-card" onclick="startSinglePlayer('jetfighter')">
+            <div class="game-icon"><i class="fa-solid fa-jet-fighter"></i></div>
+            <div class="game-info">
+                <h4>Jet Fighter</h4>
+                <span>Solo • High Score</span>
+            </div>
+        </div>
+        <div class="game-card" onclick="startSinglePlayer('carracing')">
+            <div class="game-icon"><i class="fa-solid fa-car"></i></div>
+            <div class="game-info">
+                <h4>Car Racing</h4>
+                <span>Solo • High Score</span>
+            </div>
+        </div>
+      </div>
+
+      <div id="chatListContainer" style="display: none; flex-direction: column; flex: 1; overflow: hidden;">
+        <div class="search-container">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search connections...">
+        </div>
+        <div class="users-list" id="usersList"></div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button id="homeGamesBtn" class="nav-btn" style="color: var(--primary);"><i class="fa-solid fa-gamepad"></i><span>Games</span></button>
+        <button id="createGroupBtn" class="nav-btn"><i class="fa-solid fa-users"></i><span>Group</span></button>
+        <button id="shortsBtn" class="nav-btn">
+            <div class="custom-reels-logo"><i class="fa-solid fa-circle-play"></i></div>
+            <span class="reels-brand-name">Chit-Reels</span>
+        </button>
+        <button id="appInfoBtn" class="nav-btn"><i class="fa-solid fa-circle-info"></i><span>Info</span></button>
+        <button id="logoutBtn" class="nav-btn"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></button>
+      </div>
+    </aside>
+
+    <main class="chat-area" id="mainArea">
+      
+      <div id="reelsArea" class="reels-container" style="display: none;">
+        <button id="closeReels" class="icon-btn" style="position: fixed; top: 20px; left: 20px; z-index: 100; background: rgba(0,0,0,0.5); color: white;"><i class="fa-solid fa-arrow-left"></i></button>
+        <div id="reelsWrapper" class="reels-wrapper"></div>
+      </div>
+
+      <div id="activeGameArea" class="game-overlay-container" style="display: none;">
+        <div class="game-header">
+            <button id="closeGameBtn" class="icon-btn"><i class="fa-solid fa-chevron-left"></i> Leave Game</button>
+            <span id="activeGameTitle">Game Name</span>
+            <div id="gameStatusIndicator" class="game-status">Live</div>
+        </div>
+        <div id="gameUIContainer" class="game-ui-wrapper">
+            </div>
+      </div>
+
+      <div id="emptyChatState" class="empty-state">
+        <div class="empty-icon"><i class="fa-solid fa-gamepad"></i></div>
+        <h3>Arcade & Chat</h3>
+        <p>Select a conversation to chat or challenge your friends for a quick game.</p>
+      </div>
+
+      <div id="activeChatState" style="display: none; height: 100%; flex-direction: column;">
+        <header class="chat-header glass-panel">
+          <div style="display: flex; align-items: center; gap: 10px; overflow: hidden;">
+              <button id="backToUsersBtn" class="mobile-back-btn icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
+              <div class="chat-target-info">
+                <img id="chatTargetAvatar" src="" class="avatar">
+                <div class="user-meta" style="overflow: hidden;">
+                  <span id="chatTargetName" class="name">User Name</span>
+                  <span id="typingIndicator" class="typing-text" style="display:none;">typing...</span>
+                  <span id="chatTargetStatus" class="chat-meta-subtitle">Offline</span>
+                </div>
+              </div>
+          </div>
+          <button id="launchGameMenuBtn" class="icon-btn" title="Challenge to Game" style="color: var(--accent); font-size: 22px; margin-left: auto; padding: 5px;"><i class="fa-solid fa-gamepad"></i></button>
+        </header>
+        
+        <div class="messages-container" id="chatBox"></div>
+        
+        <div id="replyPreviewContainer" class="reply-preview-container">
+          <div class="preview-content">
+            <span id="replyPreviewName" style="font-size: 13px; font-weight: bold; color: var(--primary); margin-bottom: 3px;">Replying to...</span>
+            <span id="replyPreviewText" style="font-size: 12px; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 1; line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; white-space: normal; word-break: break-word;">Message</span>
+          </div>
+          <button id="cancelReplyBtn" class="icon-btn" style="margin-left: 10px;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="chat-input-wrapper glass-panel">
+          <button class="icon-btn"><i class="fa-solid fa-paperclip"></i></button>
+          <div class="input-pill"><input type="text" id="msg" placeholder="Type a message (Double tap a message to reply)"></div>
+          <button id="sendBtn" class="primary-btn circle-btn"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="msgOptionsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="padding: 25px;">
+      <div class="modal-header">
+        <h3>Message Options</h3>
+        <button onclick="closeMsgOptions()" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="msgOptionsList" style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+      </div>
+    </div>
+  </div>
+
+  <div id="gameSelectionModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Challenge Friend</h3>
+        <button id="closeGameSelectBtn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="game-select-grid">
+          <button class="game-select-btn" data-game="tictactoe">
+              <i class="fa-solid fa-table-cells"></i>
+              <span>Tic Tac Toe</span>
+          </button>
+          <button class="game-select-btn" data-game="rps">
+              <i class="fa-solid fa-hand-scissors"></i>
+              <span>Rock Paper Scissors</span>
+          </button>
+          <button class="game-select-btn" data-game="jetfighter">
+              <i class="fa-solid fa-jet-fighter"></i>
+              <span>Jet Fighter</span>
+          </button>
+          <button class="game-select-btn" data-game="carracing">
+              <i class="fa-solid fa-car"></i>
+              <span>Car Racing</span>
+          </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="profileModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content profile-content">
+      <button id="closeProfileBtn" class="icon-btn close-modal-corner"><i class="fa-solid fa-xmark"></i></button>
+      <div class="profile-header">
+        <div style="position: relative; display: inline-block;">
+          <img id="profileAvatar" src="" class="profile-avatar-large">
+          <input type="file" id="profileAvatarInput" style="display: none;" accept="image/*">
+          <button id="editAvatarBtn" style="display:none; position:absolute; bottom:10px; right:0; background:var(--primary); color:white; border-radius:50%; width:35px; height:35px; border:none; cursor:pointer;"><i class="fa-solid fa-camera"></i></button>
+        </div>
+        <h2 id="profileName">Name</h2><p id="profileHandle" class="text-muted">@user</p>
+      </div>
+      <div class="bio-section"><p id="profileBioDisplay">Hey there! I am using Chit-Chat.</p><textarea id="profileBioEdit" style="display:none;"></textarea></div>
+      <div style="color:var(--text-muted); font-size:12px; margin-top:10px;"><i class="fa-solid fa-calendar-days"></i> <span id="profileJoinDate">Joined: ...</span></div>
+      <div class="profile-actions"><button id="editProfileBtn" class="primary-btn" style="display:none;">Edit Profile</button><button id="saveProfileBtn" class="primary-btn" style="display:none;">Save Changes</button></div>
+    </div>
+  </div>
+
+  <div id="infoModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>About Chit-Chat</h3>
+        <button id="closeModalBtn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px; line-height: 1.5;">
+        Experience real-time, secure E2EE messaging and instant gaming. Connect instantly with friends, challenge them to games, and explore tech news in a premium environment.
+      </p>
+      <a href="https://aryanvermasoc-hub.github.io/My-Info-ARYAN-VERMA/" target="_blank" class="primary-btn glow-btn" style="text-decoration: none;">
+       Owner's Info <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left: 5px;"></i>
+      </a>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script type="module" src="script.js"></script>
+  
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then((reg) => console.log('Service Worker Registered'))
+        .catch((err) => console.log('Service Worker Error', err));
+    }
+  </script>
+</body>
+</html>
